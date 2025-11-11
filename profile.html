@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LibroDex - Profile</title>
+  <link rel="stylesheet" href="styles2.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      height: 100%;
+      width: 300px;
+      position: fixed;
+      top: 0;
+      right: -300px;
+      background-color: #fff;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+      transition: 0.3s;
+      padding: 20px;
+      z-index: 1000;
+    }
+    .sidebar.active {
+      right: 0;
+    }
+
+    .close-btn {
+      cursor: pointer;
+      font-size: 20px;
+      float: right;
+    }
+
+    /* Overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(3px);
+      display: none;
+      z-index: 999;
+    }
+    .overlay.active {
+      display: block;
+    }
+
+    /* Profile Card */
+    .profile-card {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .profile-icon {
+      font-size: 40px;
+    }
+    .profile-card h3 {
+      margin: 10px 0 5px;
+    }
+    .profile-card p {
+      margin: 3px 0;
+      font-size: 14px;
+    }
+
+    /* Sidebar links */
+    .sidebar a, .sidebar button {
+      display: block;
+      padding: 10px;
+      margin: 8px 0;
+      text-decoration: none;
+      background: #eee;
+      border-radius: 6px;
+      color: #333;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+    }
+    .sidebar a:hover, .sidebar button:hover {
+      background: #ddd;
+    }
+
+    /* Theme toggle section */
+    .theme-toggle {
+      margin: 15px 0;
+    }
+    .switch {
+      float: right;
+      cursor: pointer;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Trigger Button -->
+  <button onclick="toggleSidebar()">👩 Profile</button>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <span class="close-btn" onclick="toggleSidebar()">❌</span>
+
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <div class="profile-icon">👩</div>
+      <h3>Ruksar Shaikh</h3>
+      <p>Class: TYBSc IT</p>
+      <p>Roll No: 25</p>
+      <p>Stream: Computer Science</p>
+      <p>Student ID: LDX1025</p>
+    </div>
+
+    <a href="dashboard.html">📊 Dashboard</a>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+      <span>Theme</span>
+      <span id="themeIcon" class="switch" onclick="toggleTheme()">☀️</span>
+    </div>
+
+    <button onclick="logout()">🚪 Logout</button>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("active");
+      document.getElementById("overlay").classList.toggle("active");
+    }
+
+    function toggleTheme() {
+      const icon = document.getElementById("themeIcon");
+      if (icon.textContent === "☀️") {
+        icon.textContent = "🌙"; // Dark mode
+        document.body.style.background = "#222";
+        document.body.style.color = "#fff";
+      } else {
+        icon.textContent = "☀️"; // Light mode
+        document.body.style.background = "#fff";
+        document.body.style.color = "#000";
+      }
+    }
+
+    function logout() {
+      window.location.href = "index.html"; // back to home page
+    }
+
+    
+  </script>
+</body>
+</html>
