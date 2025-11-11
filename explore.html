@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Books - LibroDex</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        :root {
+            --primary: #4e54c8;
+            --primary-dark: #3f42b6;
+            --secondary: #ff6b6b;
+            --accent: #ffd166;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --success: #28a745;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f9f9f9;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            padding: 0.7rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            font-size: 2.2rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        nav {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+        }
+           nav a.active {
+            color: var(--primary);
+        }
+
+        nav a:not(.btn):after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+   nav a:not(.btn):hover:after, nav a.active:after {
+            width: 100%;
+        }
+
+        nav a:not(.btn):hover:after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 84, 200, 0.3);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Page Header - Increased Height */
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1568667256549-094345857637?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 6rem 2rem 4rem; /* Increased padding for more height */
+            text-align: center;
+            margin-top: 70px;
+            position: relative;
+            min-height: 10vh; /* Minimum height to ensure it's tall enough */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem; /* Slightly larger font */
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .page-header p {
+            font-size: 1.3rem; /* Slightly larger font */
+            max-width: 700px;
+            margin: 0 auto 3rem; /* Added bottom margin */
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Floating Animation for Header */
+        .floating-books {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .floating-book {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100px) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        /* Search Section - Moved inside page header */
+         /* Search Section */
+        .search-section {
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0);
+        }
+
+        .search-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .search-bar {
+            display: flex;
+            width: 100%;
+            background: rgba(151, 141, 141, 0.137);
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            border: 2px solid #e9ecef;
+            border-right: none;
+            border-radius: 50px 0 0 50px;
+        }
+
+        .search-bar button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 1.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            border-radius: 0 50px 50px 0;
+        }
+
+        /*.search-bar button:hover {
+            background-color: var(--primary-dark);
+        }*/
+
+
+        /* Categories Section */
+        .categories {
+            padding: 4rem 2rem; /* Increased padding */
+            background-color: #f8f9fa;
+        }
+
+        .categories h2 {
+            text-align: center;
+            font-size: 2.5rem; /* Slightly larger */
+            margin-bottom: 3rem; /* Increased margin */
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .categories h2:after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            background: var(--primary);
+            bottom: -15px; /* Adjusted position */
+            left: 20%;
+            border-radius: 2px;
+        }
+
+        .category-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2.5rem; /* Increased gap */
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-img {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+        }
+
+        .category-content {
+            padding: 1.8rem; /* Increased padding */
+        }
+
+        .category-content h3 {
+            font-size: 1.5rem; /* Slightly larger */
+            margin-bottom: 1rem; /* Increased margin */
+            color: var(--dark);
+        }
+
+        .category-content p {
+            color: var(--gray);
+            margin-bottom: 1.5rem; /* Increased margin */
+            font-size: 1rem; /* Slightly larger */
+        }
+
+        .book-count {
+            display: inline-block;
+            background: rgba(78, 84, 200, 0.1);
+            color: var(--primary);
+            padding: 0.4rem 1rem; /* Increased padding */
+            border-radius: 20px;
+            font-size: 0.9rem; /* Slightly larger */
+            font-weight: 500;
+        }
+
+        .view-books-btn {
+            display: block;
+            text-align: center;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem; /* Increased padding */
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            margin-top: 1.2rem; /* Increased margin */
+        }
+
+        .view-books-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto 2rem;
+            text-align: left;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+            bottom: 0;
+            left: 0;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-column a {
+            color: #ddd;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-column a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .page-header h1 {
+                font-size: 2.6rem;
+            }
+            
+            .page-header p {
+                font-size: 1.2rem;
+            }
+            
+            .page-header {
+                padding: 8rem 2rem 5rem;
+                min-height: 50vh;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+            
+            nav {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: white;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: 2rem;
+                transition: var(--transition);
+                box-shadow: var(--shadow);
+            }
+            
+            nav.active {
+                left: 0;
+            }
+            
+            nav a {
+                padding: 1rem;
+                font-size: 1.2rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .page-header {
+                padding: 7rem 1.5rem 4rem;
+                min-height: 45vh;
+            }
+            
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .page-header p {
+                font-size: 1.1rem;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+            
+            .search-bar input,
+            .search-bar button {
+                width: 100%;
+                border-radius: 0;
+                padding: 1rem;
+            }
+            
+            .category-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .categories {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .page-header p {
+                font-size: 1rem;
+            }
+            
+            .categories h2 {
+                font-size: 2rem;
+            }
+            
+            .page-header {
+                padding: 6rem 1rem 3rem;
+                min-height: 40vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="logo"><span>📚</span> LibroDex</div>
+        <nav id="nav">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="features.html">Features</a>
+            <a href="explore.html" class="active">Explore</a>
+            <a href="contact.html">Contact</a>
+            <a href="login.html" class="btn">Register/Login</a>
+        </nav>
+        <button class="mobile-menu-btn" id="menuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <!-- Page Header with Search Section -->
+    <section class="page-header">
+        <div class="floating-books" id="floatingBooks"></div>
+        <h1>Explore Our Collection</h1>
+        <p>Discover books from various categories and expand your knowledge</p>
+        
+        <!-- Search Section moved inside page header -->
+        <div class="search-section">
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for specific books, authors, or topics...">
+                    <button><i class="fas fa-search"></i> Search</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories">
+        <h2>Browse by Category</h2>
+        <div class="category-container">
+            <!-- Textbooks -->
+            <div class="category-card">
+                <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80');"></div>
+                <div class="category-content">
+                    <h3>Textbooks</h3>
+                    <p>TextBooks for all respective courses and subjects</p>
+                    <span class="book-count">17,940 books</span>
+                    <a href="#" class="view-books-btn">Explore Books</a>
+                </div>
+            </div>
+
+            <!-- Reference Books -->
+            <div class="category-card">
+                <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');"></div>
+                <div class="category-content">
+                    <h3>Reference Books</h3>
+                    <p>Reference book of all languages and subjects according to the courses</p>
+                    <span class="book-count">61,262 books</span>
+                    <a href="#" class="view-books-btn">Explore Books</a>
+                </div>
+            </div>
+
+            <!-- Donated Books -->
+            <div class="category-card">
+                <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80');"></div>
+                <div class="category-content">
+                    <h3>Donated Books</h3>
+                    <p>Books generously donated by alumni and community members</p>
+                    <span class="book-count">5,550 books</span>
+                    <a href="#" class="view-books-btn">Explore Books</a>
+                </div>
+            </div>
+
+            <!-- Manuscripts / Rare books -->
+            <div class="category-card">
+                <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');"></div>
+                <div class="category-content">
+                    <h3>Manuscripts / Rare books</h3>
+                    <p>Historical manuscripts and rare book collections</p>
+                    <span class="book-count">2000 books</span>
+                    <a href="#" class="view-books-btn">Explore Books</a>
+                </div>
+            </div>
+
+            <!-- E-Books -->
+            <div class="category-card">
+                <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1798&q=80');"></div>
+                <div class="category-content">
+                    <h3>E-Books</h3>
+                    <p>Digital books accessible from anywhere</p>
+                    <span class="book-count">31,35000 books</span>
+                    <a href="#" class="view-books-btn">Explore Books</a>
+                </div>
+            </div>
+
+            <!-- Journals -->
+            <div class="category-card">
+                <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');"></div>
+                <div class="category-content">
+                    <h3>Journals</h3>
+                    <p>Academic and research journals across disciplines</p>
+                    <span class="book-count">87 books</span>
+                    <a href="#" class="view-books-btn">Explore Books</a>
+                </div>
+            </div>
+
+            <!-- Journal Back Volumes -->
+            <div class="category-card">
+                <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1506784983877-45594efa4cbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1768&q=80');"></div>
+                <div class="category-content">
+                    <h3>Journal Back Volumes</h3>
+                    <p>Archived journal volumes from previous years</p>
+                    <span class="book-count">2,022 books</span>
+                    <a href="#" class="view-books-btn">Explore Books</a>
+                </div>
+            </div>
+
+            <!-- E-Journals -->
+            <div class="category-card">
+                <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');"></div>
+                <div class="category-content">
+                    <h3>E-Journals</h3>
+                    <p>Digital journal subscriptions accessible online</p>
+                    <span class="book-count">6000+ books</span>
+                    <a href="#" class="view-books-btn">Explore Books</a>
+                </div>
+            </div>
+
+            <!-- Online Database -->
+            <div class="category-card">
+                <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');"></div>
+                <div class="category-content">
+                    <h3>Online Database (NLIST and JGate)</h3>
+                    <p>Access to premium online databases and resources</p>
+                    <span class="book-count">2 databases</span>
+                    <a href="#" class="view-books-btn">Explore Books</a>
+                </div>
+            </div>
+
+            <!-- CD/DVD -->
+            <div class="category-card">
+                <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80');"></div>
+                <div class="category-content">
+                    <h3>CD/DVD</h3>
+                    <p>Educational and multimedia resources in CD/DVD format</p>
+                    <span class="book-count">653 items</span>
+                    <a href="#" class="view-books-btn">Explore Books</a>
+                </div>
+            </div>
+   
+            <!-- Newspapers -->
+            <div class="category-card">
+                <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');"></div>
+                <div class="category-content">
+                    <h3>Newspapers</h3>
+                    <p>Current and archived newspaper collections</p>
+                    <span class="book-count">23 titles</span>
+                    <a href="#" class="view-books-btn">Explore Books</a>
+                </div>
+            </div>
+
+            <!-- Magazines -->
+            <div class="category-card">
+                <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80');"></div>
+                <div class="category-content">
+                    <h3>Magazines</h3>
+                    <p>Popular magazines across various interests</p>
+                    <span class="book-count">13 titles</span>
+                    <a href="#" class="view-books-btn">Explore Books</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>LibroDex</h3>
+                <p>Smart library management solution for modern educational institutions and readers.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="features.html">Features</a></li>
+                    <li><a href="explore.html">Explore</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Tutorials</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Library Street, Bookville</li>
+                    <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                    <li><i class="fas fa-envelope"></i> info@librodex.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2025 LibroDex. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const nav = document.getElementById('nav');
+        
+        menuBtn.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            menuBtn.innerHTML = nav.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        // Header Scroll Effect
+        const header = document.getElementById('header');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            // Back to top button visibility
+            if (window.scrollY > 500) {
+                document.getElementById('backToTop').classList.add('visible');
+            } else {
+                document.getElementById('backToTop').classList.remove('visible');
+            }
+        });
+
+        // Back to Top Button
+        document.getElementById('backToTop').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Search functionality
+        document.querySelector('.search-bar button').addEventListener('click', () => {
+            const searchTerm = document.querySelector('.search-bar input').value;
+            if (searchTerm) {
+                alert(`Searching for: ${searchTerm}`);
+                // In a real application, this would redirect to search results
+            }
+        });
+
+        // Allow Enter key to trigger search
+        document.querySelector('.search-bar input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.querySelector('.search-bar button').click();
+            }
+        });
+
+        // Create floating books animation
+        const floatingBooksContainer = document.getElementById('floatingBooks');
+        const bookIcons = ['📚', '📖', '📕', '📗', '📘', '📙', '📓', '📒', '📔'];
+        
+        for (let i = 0; i < 15; i++) {
+            const book = document.createElement('div');
+            book.className = 'floating-book';
+            book.textContent = bookIcons[Math.floor(Math.random() * bookIcons.length)];
+            book.style.left = `${Math.random() * 100}%`;
+            book.style.animationDelay = `${Math.random() * 15}s`;
+            book.style.fontSize = `${Math.random() * 1 + 1.5}rem`;
+            floatingBooksContainer.appendChild(book);
+        }
+    </script>
+</body>
+</html>

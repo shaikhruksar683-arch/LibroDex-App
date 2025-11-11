@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports - LibroDex</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary: #4e54c8;
+      --primary-dark: #3f42b6;
+      --secondary: #ff6b6b;
+      --accent: #ffd166;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --info: #17a2b8;
+      --sidebar-width: 280px;
+      --transition: all 0.3s ease;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      --hover-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: #f9f9f9;
+      color: var(--dark);
+      line-height: 1.6;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Styles - Enhanced with index.html styling */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+      color: white;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      padding: 1.5rem 0;
+      transition: var(--transition);
+      z-index: 1000;
+      box-shadow: var(--shadow);
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      padding: 0 1.5rem 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .sidebar-header h2 {
+      color: var(--accent);
+      font-size: 1.8rem;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-header h2 span {
+      font-size: 2rem;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 0 1rem;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      padding: 1rem 1.2rem;
+      border-radius: 8px;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .sidebar-menu a:not(.active):after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 8px;
+      left: 1.2rem;
+      background-color: var(--accent);
+      transition: var(--transition);
+    }
+
+    .sidebar-menu a:hover:after,
+    .sidebar-menu a.active:after {
+      width: 30px;
+    }
+
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      transform: translateX(5px);
+    }
+
+    .sidebar-menu i {
+      margin-right: 0.8rem;
+      width: 20px;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      padding: 1.5rem;
+      transition: var(--transition);
+    }
+
+    /* Header Styles - Enhanced with index.html styling */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 1.2rem 2rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .header:hover {
+      box-shadow: var(--hover-shadow);
+    }
+
+    .header h1 {
+      color: var(--primary);
+      font-size: 1.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      transition: var(--transition);
+      background: rgba(78, 84, 200, 0.1);
+    }
+
+    .user-info:hover {
+      background: rgba(78, 84, 200, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .user-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      object-fit: cover;
+      box-shadow: 0 0 10px rgba(255, 209, 102, 0.5);
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      background: white;
+      padding: 1.2rem 2rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .filter-bar:hover {
+      box-shadow: var(--hover-shadow);
+    }
+
+    .filter-options {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 10px rgba(78, 84, 200, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(78, 84, 200, 0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    select {
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.2);
+      outline: none;
+    }
+
+    /* Stats Cards - Enhanced with index.html styling */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .stat-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: var(--primary);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--hover-shadow);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      color: white;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover .stat-icon {
+      transform: scale(1.1);
+    }
+
+    .stat-icon.issued {
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+    }
+
+    .stat-icon.returned {
+      background: linear-gradient(to right, var(--success), #20c997);
+    }
+
+    .stat-icon.students {
+      background: linear-gradient(to right, var(--warning), #fd7e14);
+    }
+
+    .stat-icon.books {
+      background: linear-gradient(to right, var(--info), #6f42c1);
+    }
+
+    .stat-info h3 {
+      font-size: 2rem;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .stat-info p {
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    /* Charts Section */
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-box {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-box:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--hover-shadow);
+    }
+
+    .chart-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: var(--primary);
+    }
+
+    .chart-box h3 {
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .chart-box.full-width {
+      grid-column: span 2;
+    }
+
+    canvas {
+      max-height: 350px;
+      width: 100% !important;
+    }
+
+    /* Mobile Menu Toggle */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      z-index: 1100;
+      background: var(--primary);
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .menu-toggle:hover {
+      background: var(--primary-dark);
+      transform: scale(1.1);
+    }
+        .menu-toggle {
+    display: none !important;
+}
+
+    /* Back to Top Button - From index.html */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      z-index: 999;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 1200px) {
+      .sidebar {
+        width: 230px;
+      }
+      
+      .main-content {
+        margin-left: 230px;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .sidebar {
+        width: 70px;
+        overflow: visible;
+      }
+      
+      .sidebar-header h2, .sidebar-menu span {
+        display: none;
+      }
+      
+      .sidebar-menu i {
+        margin-right: 0;
+        font-size: 1.4rem;
+      }
+      
+      .main-content {
+        margin-left: 70px;
+      }
+      
+      .charts {
+        grid-template-columns: 1fr;
+      }
+      
+      .chart-box.full-width {
+        grid-column: span 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      
+      .header-actions {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .filter-bar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+      }
+      
+      .filter-options {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        width: 0;
+        padding: 0;
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.active {
+        width: 280px;
+        padding: 1.5rem 0;
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+        padding: 1rem;
+      }
+      
+      .menu-toggle {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .stat-info h3 {
+        font-size: 1.8rem;
+      }
+      
+      .chart-box {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile Menu Toggle -->
+  <div class="menu-toggle" id="menuToggle">
+    <i class="fas fa-bars"></i>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2><span>📚</span> LibroDex</h2>
+      <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Admin Panel</p>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="admin.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+      <li><a href="mngbooks.html"><i class="fas fa-book"></i> <span>Manage Books</span></a></li>
+      <li><a href="mngstudents.html"><i class="fas fa-user-graduate"></i> <span>Manage Students</span></a></li>
+      <li><a href="issue_return.html"><i class="fas fa-exchange-alt"></i> <span>Issue/Return</span></a></li>
+      <li><a href="reports.html" class="active"><i class="fas fa-chart-bar"></i> <span>Reports</span></a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+      <li><a href="login.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <h1><i class="fas fa-chart-bar"></i> Reports & Analytics</h1>
+      <div class="user-info">
+        <img src="https://ui-avatars.com/api/?name=Admin+User&background=4e54c8&color=fff" alt="Admin">
+        <span>Admin User</span>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <div class="filter-options">
+        <select id="timePeriod">
+          <option value="monthly">Monthly</option>
+          <option value="quarterly">Quarterly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+        <select id="streamFilter">
+          <option value="all">All Streams</option>
+          <option value="bcs">BCS</option>
+          <option value="bvoc">BVoc</option>
+          <option value="bcom">BCom</option>
+          <option value="science">Science</option>
+        </select>
+      </div>
+      <div class="filter-actions">
+        <button class="btn btn-outline">
+          <i class="fas fa-download"></i> Export Report
+        </button>
+        <button class="btn btn-primary">
+          <i class="fas fa-sync"></i> Refresh Data
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-icon issued">
+          <i class="fas fa-book"></i>
+        </div>
+        <div class="stat-info">
+          <h3>184</h3>
+          <p>Books Issued This Month</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon returned">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="stat-info">
+          <h3>142</h3>
+          <p>Books Returned</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon students">
+          <i class="fas fa-user-graduate"></i>
+        </div>
+        <div class="stat-info">
+          <h3>356</h3>
+          <p>Active Students</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon books">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <div class="stat-info">
+          <h3>1,248</h3>
+          <p>Total Books Available</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts">
+      <!-- Bar Chart -->
+      <div class="chart-box">
+        <h3><i class="fas fa-chart-bar"></i> Stream-wise Books Issued</h3>
+        <canvas id="barChart"></canvas>
+      </div>
+
+      <!-- Pie Chart -->
+      <div class="chart-box">
+        <h3><i class="fas fa-chart-pie"></i> Active vs Inactive Students</h3>
+        <canvas id="pieChart"></canvas>
+      </div>
+
+      <!-- Line Chart -->
+      <div class="chart-box full-width">
+        <h3><i class="fas fa-chart-line"></i> Monthly Issued Books</h3>
+        <canvas id="lineChart"></canvas>
+      </div>
+
+      <!-- Doughnut Chart -->
+      <div class="chart-box">
+        <h3><i class="fas fa-chart-pie"></i> Book Categories</h3>
+        <canvas id="doughnutChart"></canvas>
+      </div>
+
+      <!-- Horizontal Bar Chart -->
+      <div class="chart-box">
+        <h3><i class="fas fa-chart-bar"></i> Top 5 Most Issued Books</h3>
+        <canvas id="horizontalBarChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <a href="#" class="back-to-top" id="backToTop">
+    <i class="fas fa-arrow-up"></i>
+  </a>
+
+  <script>
+    // Toggle sidebar on mobile
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+    });
+    
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth < 768 && 
+          !sidebar.contains(e.target) && 
+          !menuToggle.contains(e.target) &&
+          sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+      }
+    });
+
+    // Chart Colors using LibroDex theme
+    const chartColors = {
+      primary: '#4e54c8',
+      primaryLight: '#8f94fb',
+      secondary: '#ff6b6b',
+      accent: '#ffd166',
+      success: '#28a745',
+      warning: '#ffc107',
+      info: '#17a2b8'
+    };
+
+    // Bar Chart - Stream wise issued books
+    new Chart(document.getElementById("barChart"), {
+      type: "bar",
+      data: {
+        labels: ["BCS", "BVoc", "BCom", "Science", "BSc"],
+        datasets: [{
+          label: "Books Issued",
+          data: [35, 20, 15, 25, 40],
+          backgroundColor: [
+            chartColors.primary,
+            chartColors.secondary,
+            chartColors.accent,
+            chartColors.success,
+            chartColors.info
+          ],
+          borderRadius: 8,
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { 
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            titleFont: { family: 'Poppins' },
+            bodyFont: { family: 'Poppins' }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(0,0,0,0.05)' }
+          },
+          x: {
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Pie Chart - Active vs Inactive
+    new Chart(document.getElementById("pieChart"), {
+      type: "pie",
+      data: {
+        labels: ["Active", "Inactive"],
+        datasets: [{
+          data: [90, 10],
+          backgroundColor: [chartColors.success, chartColors.secondary],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { font: { family: 'Poppins' } }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            titleFont: { family: 'Poppins' },
+            bodyFont: { family: 'Poppins' }
+          }
+        }
+      }
+    });
+
+    // Line Chart - Monthly Issued Books
+    new Chart(document.getElementById("lineChart"), {
+      type: "line",
+      data: {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
+        datasets: [{
+          label: "Books Issued",
+          data: [15, 25, 20, 40, 30, 50, 45, 60],
+          borderColor: chartColors.primary,
+          backgroundColor: "rgba(78, 84, 200, 0.1)",
+          fill: true,
+          tension: 0.3,
+          pointBackgroundColor: chartColors.primary,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { 
+          legend: { 
+            position: "top",
+            labels: { font: { family: 'Poppins' } }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            titleFont: { family: 'Poppins' },
+            bodyFont: { family: 'Poppins' }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(0,0,0,0.05)' }
+          },
+          x: {
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Doughnut Chart - Book Categories
+    new Chart(document.getElementById("doughnutChart"), {
+      type: "doughnut",
+      data: {
+        labels: ["Programming", "Science", "Mathematics", "Literature", "History"],
+        datasets: [{
+          data: [35, 20, 15, 18, 12],
+          backgroundColor: [
+            chartColors.primary,
+            chartColors.secondary,
+            chartColors.accent,
+            chartColors.success,
+            chartColors.info
+          ],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { font: { family: 'Poppins' } }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            titleFont: { family: 'Poppins' },
+            bodyFont: { family: 'Poppins' }
+          }
+        }
+      }
+    });
+
+    // Horizontal Bar Chart - Top 5 Most Issued Books
+    new Chart(document.getElementById("horizontalBarChart"), {
+      type: "bar",
+      data: {
+        labels: ["Data Structures", "Database Systems", "Operating Systems", "Computer Networks", "Algorithms"],
+        datasets: [{
+          label: "Times Issued",
+          data: [45, 38, 32, 28, 25],
+          backgroundColor: chartColors.primaryLight,
+          borderRadius: 8,
+          borderWidth: 0
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        plugins: { 
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            titleFont: { family: 'Poppins' },
+            bodyFont: { family: 'Poppins' }
+          }
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            grid: { color: 'rgba(0,0,0,0.05)' }
+          },
+          y: {
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Back to top button functionality
+    const backToTop = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+    
+    backToTop.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Card animation on scroll
+    const cards = document.querySelectorAll('.stat-card');
+    
+    function checkScroll() {
+      const triggerBottom = window.innerHeight * 0.9;
+      
+      cards.forEach(card => {
+        const cardTop = card.getBoundingClientRect().top;
+        
+        if (cardTop < triggerBottom) {
+          card.classList.add('visible');
+        }
+      });
+    }
+    
+    window.addEventListener('scroll', checkScroll);
+    // Initial check in case cards are already in view
+    checkScroll();
+    
+    // Logout function
+    function logout() {
+      localStorage.removeItem('adminToken');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

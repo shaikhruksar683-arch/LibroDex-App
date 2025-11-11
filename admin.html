@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - LibroDex</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        :root {
+            --primary: #4e54c8;
+            --primary-dark: #3f42b6;
+            --secondary: #ff6b6b;
+            --accent: #ffd166;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --sidebar-width: 280px;
+            --transition: all 0.3s ease;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles - Enhanced with index.html styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+            color: white;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            padding: 1.5rem 0;
+            transition: var(--transition);
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-header h2 {
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-header h2 span {
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0 1rem;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .sidebar-menu a:not(.active):after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 8px;
+            left: 1.2rem;
+            background-color: var(--accent);
+            transition: var(--transition);
+        }
+
+        .sidebar-menu a:hover:after,
+        .sidebar-menu a.active:after {
+            width: 30px;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu i {
+            margin-right: 0.8rem;
+            width: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+
+        /* Header Styles - Enhanced with index.html styling */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 1.2rem 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .header:hover {
+            box-shadow: var(--hover-shadow);
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            border-radius: 50px;
+            padding: 0.7rem 1.2rem;
+            width: 300px;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .search-box:focus-within {
+            box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.2);
+            border-color: var(--primary);
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            padding: 0.5rem;
+            width: 100%;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: var(--transition);
+            background: rgba(78, 84, 200, 0.1);
+        }
+
+        .user-info:hover {
+            background: rgba(78, 84, 200, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            object-fit: cover;
+            box-shadow: 0 0 10px rgba(255, 209, 102, 0.5);
+        }
+
+        /* Dashboard Cards - Enhanced with index.html styling */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .card:hover .card-icon {
+            transform: scale(1.1);
+        }
+
+        .card-icon.books {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+        }
+
+        .card-icon.students {
+            background: linear-gradient(to right, var(--success), #20c997);
+        }
+
+        .card-icon.issued {
+            background: linear-gradient(to right, var(--warning), #fd7e14);
+        }
+
+        .card-icon.pending {
+            background: linear-gradient(to right, var(--danger), #e83e8c);
+        }
+
+        .card-icon.requests {
+            background: linear-gradient(to right, var(--info), #6f42c1);
+        }
+
+        .card h3 {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .card-trend {
+            display: flex;
+            align-items: center;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .card-trend.up {
+            color: var(--success);
+        }
+
+        .card-trend.down {
+            color: var(--danger);
+        }
+
+        /* Charts & Tables - Enhanced with index.html styling */
+        .charts-tables {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container, .activity-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .chart-container:hover, .activity-container:hover {
+            box-shadow: var(--hover-shadow);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header h2:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+            bottom: -8px;
+            left: 0;
+            border-radius: 2px;
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+        }
+
+        .view-all:hover {
+            background: rgba(78, 84, 200, 0.1);
+            text-decoration: none;
+        }
+
+        .chart-placeholder {
+            height: 250px;
+            background: var(--light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            flex-direction: column;
+            gap: 1rem;
+            transition: var(--transition);
+        }
+
+        .chart-placeholder:hover {
+            transform: translateY(-3px);
+        }
+
+        .chart-placeholder i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+            transition: var(--transition);
+        }
+
+        .activity-item:hover {
+            background: rgba(78, 84, 200, 0.05);
+            transform: translateX(5px);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1rem;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .activity-item:hover .activity-icon {
+            transform: scale(1.1);
+        }
+
+        .activity-icon.issue {
+            background: var(--warning);
+        }
+
+        .activity-icon.return {
+            background: var(--success);
+        }
+
+        .activity-icon.add {
+            background: var(--info);
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-details h3 {
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+            color: var(--dark);
+        }
+
+        .activity-details p {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--gray);
+            white-space: nowrap;
+        }
+
+        /* Data Tables - Enhanced with index.html styling */
+        .data-table {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            transition: var(--transition);
+        }
+
+        .data-table:hover {
+            box-shadow: var(--hover-shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: var(--light);
+            color: var(--primary);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        tr {
+            transition: var(--transition);
+        }
+
+        tr:hover {
+            background: rgba(78, 84, 200, 0.05);
+            transform: translateX(5px);
+        }
+
+        .status {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            transition: var(--transition);
+        }
+
+        .status:hover {
+            transform: scale(1.05);
+        }
+
+        .status-available {
+            background: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+        }
+
+        .status-issued {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+        }
+
+        .action-btn {
+            padding: 0.5rem 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            margin-right: 0.5rem;
+        }
+
+        .btn-view {
+            background: rgba(23, 162, 184, 0.2);
+            color: var(--info);
+        }
+
+        .btn-edit {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+        }
+
+        .btn-delete {
+            background: rgba(220, 53, 69, 0.2);
+            color: var(--danger);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Mobile Menu Toggle - Enhanced with index.html styling */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 1100;
+            background: var(--primary);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .menu-toggle:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1);
+        }
+        .menu-toggle {
+    display: none !important;
+}
+
+
+        /* Back to Top Button - From index.html */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .charts-tables {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+                overflow: visible;
+            }
+            
+            .sidebar-header h2, .sidebar-menu span {
+                display: none;
+            }
+            
+            .sidebar-menu i {
+                margin-right: 0;
+                font-size: 1.4rem;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .search-box {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                width: 0;
+                padding: 0;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                width: 280px;
+                padding: 1.5rem 0;
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .card h2 {
+                font-size: 1.8rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.2rem;
+            }
+            
+            th, td {
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <div class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2><span>📚</span> LibroDex</h2>
+            <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Admin Panel</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="admin.html" class="active"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+            <li><a href="mngbooks.html"><i class="fas fa-book"></i> <span>Manage Books</span></a></li>
+            <li><a href="mngstudents.html"><i class="fas fa-user-graduate"></i> <span>Manage Students</span></a></li>
+            <li><a href="issue_return.html"><i class="fas fa-exchange-alt"></i> <span>Issue/Return</span></a></li>
+            <li><a href="reports.html"><i class="fas fa-chart-bar"></i> <span>Reports</span></a></li>
+            <li><a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="login.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+            <div class="header-actions">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="user-info">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=4e54c8&color=fff" alt="Admin">
+                    <span>Admin User</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <div class="card-icon books">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3>TOTAL BOOKS</h3>
+                <h2>1,248</h2>
+                <div class="card-trend up">
+                    <i class="fas fa-arrow-up"></i> 12% from last month
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon students">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h3>TOTAL STUDENTS</h3>
+                <h2>356</h2>
+                <div class="card-trend up">
+                    <i class="fas fa-arrow-up"></i> 5% from last month
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon issued">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <h3>BOOKS ISSUED</h3>
+                <h2>184</h2>
+                <div class="card-trend down">
+                    <i class="fas fa-arrow-down"></i> 3% from last week
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon pending">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3>PENDING RETURNS</h3>
+                <h2>42</h2>
+                <div class="card-trend up">
+                    <i class="fas fa-arrow-up"></i> 8% from yesterday
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon requests">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <h3>PENDING REQUESTS</h3>
+                <h2>20</h2>
+                <div class="card-trend up">
+                    <i class="fas fa-arrow-up"></i> 10% from yesterday
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts & Recent Activity -->
+        <div class="charts-tables">
+            <div class="chart-container">
+                <div class="section-header">
+                    <h2>Books Statistics</h2>
+                    <a href="#" class="view-all">View Report</a>
+                </div>
+                <div class="chart-placeholder">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Books issued vs returned chart</span>
+                </div>
+            </div>
+            <div class="activity-container">
+                <div class="section-header">
+                    <h2>Recent Activity</h2>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-icon issue">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="activity-details">
+                            <h3>Book Issued</h3>
+                            <p>Introduction to Algorithms to Riya Sharma</p>
+                        </div>
+                        <div class="activity-time">2h ago</div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon return">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="activity-details">
+                            <h3>Book Returned</h3>
+                            <p>Clean Code returned by Amit Kumar</p>
+                        </div>
+                        <div class="activity-time">5h ago</div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon add">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="activity-details">
+                            <h3>New Book Added</h3>
+                            <p>Design Patterns added to library</p>
+                        </div>
+                        <div class="activity-time">Yesterday</div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon issue">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="activity-details">
+                            <h3>Book Issued</h3>
+                            <p>The Pragmatic Programmer to Neha Singh</p>
+                        </div>
+                        <div class="activity-time">Yesterday</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Recently Added Books -->
+        <div class="data-table">
+            <div class="section-header">
+                <h2>Recently Added Books</h2>
+                <a href="#" class="view-all">View All Books</a>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>BK0012</td>
+                        <td>Introduction to Algorithms</td>
+                        <td>Thomas H. Cormen</td>
+                        <td>Computer Science</td>
+                        <td><span class="status status-available">Available</span></td>
+                        <td>
+                            <button class="action-btn btn-view"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn btn-edit"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>BK0013</td>
+                        <td>Clean Code: A Handbook of Agile Software Craftsmanship</td>
+                        <td>Robert C. Martin</td>
+                        <td>Programming</td>
+                        <td><span class="status status-issued">Issued</span></td>
+                        <td>
+                            <button class="action-btn btn-view"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn btn-edit"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>BK0014</td>
+                        <td>The Pragmatic Programmer</td>
+                        <td>Andrew Hunt, David Thomas</td>
+                        <td>Programming</td>
+                        <td><span class="status status-available">Available</span></td>
+                        <td>
+                            <button class="action-btn btn-view"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn btn-edit"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>BK0015</td>
+                        <td>Design Patterns: Elements of Reusable Object-Oriented Software</td>
+                        <td>Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides</td>
+                        <td>Software Engineering</td>
+                        <td><span class="status status-available">Available</span></td>
+                        <td>
+                            <button class="action-btn btn-view"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn btn-edit"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <script>
+        // Toggle sidebar on mobile
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth < 768 && 
+                !sidebar.contains(e.target) && 
+                !menuToggle.contains(e.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem('adminToken');
+            window.location.href = 'login.html';
+        }
+        
+        // Back to top button functionality
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Card animation on scroll
+        const cards = document.querySelectorAll('.card');
+        
+        function checkScroll() {
+            const triggerBottom = window.innerHeight * 0.9;
+            
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                
+                if (cardTop < triggerBottom) {
+                    card.classList.add('visible');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', checkScroll);
+        // Initial check in case cards are already in view
+        checkScroll();
+        
+        // Simulate chart loading
+        setTimeout(() => {
+            const chartPlaceholder = document.querySelector('.chart-placeholder');
+            chartPlaceholder.innerHTML = `
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                    <div style="background: linear-gradient(to right, var(--primary), var(--primary-dark)); height: 200px; width: 100%; border-radius: 8px; display: flex; align-items: flex-end; padding: 10px;">
+                        <div style="flex: 1; display: flex; justify-content: space-around; align-items: flex-end;">
+                            <div style="width: 30px; background: var(--accent); height: 60%; border-radius: 3px;"></div>
+                            <div style="width: 30px; background: var(--accent); height: 80%; border-radius: 3px;"></div>
+                            <div style="width: 30px; background: var(--accent); height: 45%; border-radius: 3px;"></div>
+                            <div style="width: 30px; background: var(--accent); height: 75%; border-radius: 3px;"></div>
+                            <div style="width: 30px; background: var(--accent); height: 50%; border-radius: 3px;"></div>
+                            <div style="width: 30px; background: var(--accent); height: 90%; border-radius: 3px;"></div>
+                            <div style="width: 30px; background: var(--accent); height: 65%; border-radius: 3px;"></div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 10px; color: var(--gray);">Books issued vs returned (last 7 days)</p>
+                </div>
+            `;
+        }, 1000);
+    </script>
+</body>
+</html>
