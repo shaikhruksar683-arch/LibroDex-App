@@ -34,7 +34,7 @@
             overflow-x: hidden;
         }
 
-        /* Header Styles */
+        /* Header Styles - Updated to match explore.html */
         header {
             background-color: white;
             box-shadow: var(--shadow);
@@ -85,7 +85,8 @@
             position: relative;
             transition: var(--transition);
         }
-           nav a.active {
+
+        nav a.active {
             color: var(--primary);
         }
 
@@ -99,7 +100,8 @@
             background-color: var(--primary);
             transition: var(--transition);
         }
-   nav a:not(.btn):hover:after, nav a.active:after {
+
+        nav a:not(.btn):hover:after, nav a.active:after {
             width: 100%;
         }
 
@@ -134,31 +136,78 @@
             cursor: pointer;
         }
 
-        /* Page Header */
-        .page-header {
-            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+        /* Profile Container - Moved to align with explore.html */
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: var(--transition);
+            margin-left: auto; /* This pushes it to the right */
+        }
+
+        .profile-container:hover {
+            background-color: rgba(78, 84, 200, 0.1);
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 0px;
+            padding: 0rem;
+        }
+
+        /* Welcome Section - Updated to match explore.html */
+        .welcome-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1568667256549-094345857637?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
             color: white;
-            padding: 8rem 2rem 4rem;
+            padding: 6rem 2rem 4rem;
             text-align: center;
             margin-top: 70px;
+            position: relative;
+            min-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-radius: 0;
+            margin-bottom: 0;
+            box-shadow: none;
         }
 
-        .page-header h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
+        .welcome-section h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        .page-header p {
-            font-size: 1.2rem;
+        .welcome-section p {
+            font-size: 1.3rem;
             max-width: 700px;
-            margin: 0 auto;
+            margin: 0 auto 3rem;
             opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
-        /* Search Section */
+        /* Search Section - Updated to match explore.html */
         .search-section {
             padding: 2rem;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0);
         }
 
         .search-container {
@@ -169,7 +218,7 @@
         .search-bar {
             display: flex;
             width: 100%;
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 50px;
             overflow: hidden;
             box-shadow: var(--shadow);
@@ -201,38 +250,85 @@
             background-color: var(--primary-dark);
         }
 
-        /* Categories Section */
-        .categories {
-            padding: 3rem 2rem;
-            background-color: #f8f9fa;
+        /* Floating Animation for Header */
+        .floating-books {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
         }
 
-        .categories h2 {
-            text-align: center;
-            font-size: 2.2rem;
-            margin-bottom: 2.5rem;
+        .floating-book {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100px) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        /* Categories Section - Updated to match explore.html */
+        .categories-section {
+            padding: 4rem 2rem;
+            background-color: #f8f9fa;
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
             color: var(--primary);
             position: relative;
             display: inline-block;
+            text-align: center;
             left: 50%;
             transform: translateX(-50%);
         }
 
-        .categories h2:after {
+        .section-header h2:after {
             content: '';
             position: absolute;
             width: 60%;
             height: 4px;
             background: var(--primary);
-            bottom: -10px;
+            bottom: -15px;
             left: 20%;
             border-radius: 2px;
         }
 
-        .category-container {
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .view-all:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* Category Grid - Updated to match explore.html */
+        .category-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 2.5rem;
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -243,6 +339,7 @@
             overflow: hidden;
             box-shadow: var(--shadow);
             transition: var(--transition);
+            position: relative;
         }
 
         .category-card:hover {
@@ -254,178 +351,468 @@
             height: 180px;
             background-size: cover;
             background-position: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .category-content {
-            padding: 1.5rem;
+        .category-img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
         }
 
-        .category-content h3 {
-            font-size: 1.4rem;
-            margin-bottom: 0.8rem;
+        .category-info {
+            padding: 1.8rem;
+        }
+
+        .category-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
             color: var(--dark);
         }
 
-        .category-content p {
+        .category-info p {
             color: var(--gray);
-            margin-bottom: 1.2rem;
-            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
         }
 
         .book-count {
             display: inline-block;
             background: rgba(78, 84, 200, 0.1);
             color: var(--primary);
-            padding: 0.3rem 0.8rem;
+            padding: 0.4rem 1rem;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 500;
         }
 
-        .view-books-btn {
+        .explore-btn {
             display: block;
             text-align: center;
             background-color: var(--primary);
             color: white;
-            padding: 0.7rem;
+            padding: 0.8rem;
             border-radius: 5px;
             text-decoration: none;
             font-weight: 500;
             transition: var(--transition);
-            margin-top: 1rem;
+            margin-top: 1.2rem;
         }
 
-        .view-books-btn:hover {
+        .explore-btn:hover {
             background-color: var(--primary-dark);
         }
 
-        /* Footer */
-        footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
+        /* Side Panel */
+        .side-panel {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            padding: 2rem;
+            z-index: 1000;
+            overflow-y: auto;
         }
 
-        .footer-content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto 2rem;
-            text-align: left;
+        .side-panel.active {
+            right: 0;
         }
 
-        .footer-column {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .footer-column h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            padding-bottom: 0.5rem;
-        }
-
-        .footer-column h3:after {
-            content: '';
+        .side-panel .close-btn {
+            font-size: 1.5rem;
+            cursor: pointer;
             position: absolute;
-            width: 40px;
-            height: 3px;
-            background: var(--primary);
-            bottom: 0;
-            left: 0;
+            top: 1.5rem;
+            right: 1.5rem;
+            color: var(--gray);
+            transition: var(--transition);
         }
 
-        .footer-column ul {
+        .side-panel .close-btn:hover {
+            color: var(--secondary);
+        }
+
+        .side-panel h3 {
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .side-panel ul {
             list-style: none;
         }
 
-        .footer-column ul li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-column a {
-            color: #ddd;
-            text-decoration: none;
+        .side-panel ul li {
+            margin: 1.2rem 0;
+            cursor: pointer;
+            padding: 0.8rem;
+            border-radius: 8px;
             transition: var(--transition);
-        }
-
-        .footer-column a:hover {
-            color: white;
-            padding-left: 5px;
-        }
-
-        .social-icons {
             display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .social-icons a {
-            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transition: var(--transition);
+            gap: 0.8rem;
         }
 
-        .social-icons a:hover {
-            background: var(--primary);
-            transform: translateY(-3px);
+        .side-panel ul li:hover {
+            background-color: rgba(78, 84, 200, 0.1);
         }
 
-        .copyright {
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.9rem;
-            opacity: 0.8;
+        .side-panel ul li.active {
+            background-color: rgba(78, 84, 200, 0.2);
+            font-weight: 600;
+            color: var(--primary);
         }
 
-        /* Back to Top Button */
-        .back-to-top {
+        .side-panel ul li a {
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        /* Profile Card */
+        .profile-card {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            color: white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 450px;
+            max-width: 90%;
+            z-index: 1100;
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .profile-card.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .profile-card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-card-header .big-icon {
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
+            background: var(--light);
             display: flex;
             align-items: center;
             justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            visibility: hidden;
+            font-size: 2rem;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .profile-card-header h3 {
+            color: var(--dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .profile-details p {
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .profile-details strong {
+            color: var(--dark);
+            min-width: 120px;
+        }
+
+        .profile-details span {
+            color: var(--gray);
+        }
+
+        .close-card {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
             transition: var(--transition);
-            z-index: 999;
+            margin-top: 1.5rem;
+            width: 100%;
         }
 
-        .back-to-top.visible {
+        .close-card:hover {
+            background: #e74c3c;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 900;
+            display: none;
+        }
+
+          /* Feedback Card */
+        .feedback-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 450px;
+            max-width: 90%;
+            z-index: 1100;
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .feedback-card.active {
+            transform: translate(-50%, -50%) scale(1);
             opacity: 1;
-            visibility: visible;
         }
 
-        .back-to-top:hover {
+        .feedback-card h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .feedback-card .close-cross {
+            position: absolute;
+            top: 1rem;
+            right: 1.2rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+
+        .feedback-card .close-cross:hover {
+            color: var(--secondary);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .submit-btn:hover {
             background: var(--primary-dark);
-            transform: translateY(-3px);
         }
 
+        .success-message {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        /* Feedback Card */
+        .feedback-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 450px;
+            max-width: 90%;
+            z-index: 1100;
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .feedback-card.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .feedback-card h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .feedback-card .close-cross {
+            position: absolute;
+            top: 1rem;
+            right: 1.2rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+
+        .feedback-card .close-cross:hover {
+            color: var(--secondary);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .success-message {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 900;
+            display: none;
+        }
+
+        /* Blur effect */
+        .blurred {
+            filter: blur(5px);
+            pointer-events: none;
+        }
         /* Responsive Styles */
         @media (max-width: 992px) {
-            .page-header h1 {
-                font-size: 2.4rem;
+            .category-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
             
-            .page-header p {
-                font-size: 1.1rem;
+            .welcome-section h1 {
+                font-size: 2.6rem;
+            }
+            
+            .welcome-section p {
+                font-size: 1.2rem;
+            }
+            
+            .welcome-section {
+                padding: 8rem 2rem 5rem;
+                min-height: 50vh;
             }
         }
 
@@ -461,16 +848,22 @@
                 display: block;
             }
             
-            .page-header {
-                padding: 7rem 1.5rem 3rem;
+            .main-content {
+                padding: 1rem;
+                margin-top: 70px;
             }
             
-            .page-header h1 {
-                font-size: 2rem;
+            .welcome-section {
+                padding: 7rem 1.5rem 4rem;
+                min-height: 45vh;
             }
             
-            .page-header p {
-                font-size: 1rem;
+            .welcome-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .welcome-section p {
+                font-size: 1.1rem;
             }
             
             .search-bar {
@@ -485,24 +878,61 @@
                 padding: 1rem;
             }
             
-            .category-container {
+            .category-grid {
                 grid-template-columns: 1fr;
             }
-        }
-
-        @media (max-width: 576px) {
-            .page-header h1 {
-                font-size: 1.8rem;
+            
+            .categories-section {
+                padding: 3rem 1.5rem;
             }
             
-            .categories h2 {
-                font-size: 1.8rem;
+            .side-panel {
+                width: 280px;
+            }
+        }
+        
+
+        @media (max-width: 576px) {
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .profile-card {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            
+            .profile-card-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .welcome-section h1 {
+                font-size: 2rem;
+            }
+            
+            .welcome-section p {
+                font-size: 1rem;
+            }
+            
+            .welcome-section {
+                padding: 6rem 1rem 3rem;
+                min-height: 40vh;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Header - Updated to match explore.html -->
     <header id="header">
         <div class="logo"><span>📚</span> LibroDex</div>
         <nav id="nav">
@@ -511,215 +941,243 @@
             <a href="features2.html">Features</a>
             <a href="explore2.html" class="active">Explore</a>
             <a href="contact2.html">Contact</a>
-            <a href="login.html" class="btn">Register/Login</a>
+            <div class="profile-container" id="profileBtn">
+                <span><strong>Profile</strong></span>
+                <div class="profile-icon">👤</div>
+            </div>
         </nav>
         <button class="mobile-menu-btn" id="menuBtn">
             <i class="fas fa-bars"></i>
         </button>
     </header>
 
-    <!-- Page Header -->
-    <section class="page-header">
-        <h1>Explore Our Collection</h1>
-        <p>Discover books from various categories and expand your knowledge</p>
-    </section>
-
-    <!-- Search Section -->
-    <section class="search-section">
-        <div class="search-container">
-            <div class="search-bar">
-                <input type="text" placeholder="Search for specific books, authors, or topics...">
-                <button><i class="fas fa-search"></i> Search</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Categories Section -->
-    <section class="categories">
-        <h2>Browse by Category</h2>
-        <div class="category-container">
-            <!-- Programming Languages -->
-            <div class="category-card">
-                <div class="category-img" style="background: linear-gradient(to right, #6a11cb, #2575fc);"></div>
-                <div class="category-content">
-                    <h3>Textbooks</h3>
-                    <p>TextBooks for all respective courses and subjects</p>
-                    <span class="book-count">17,940 books</span>
-                    <a href="#" class="view-books-btn">Explore Books</a>
+    <!-- Main Content - Updated to match explore.html -->
+    <div class="main-content" id="pageContent">
+        <!-- Welcome Section with Search Section -->
+        <section class="welcome-section">
+            <div class="floating-books" id="floatingBooks"></div>
+            <h1>Explore Our Collection</h1>
+            <p>Discover books from various categories and expand your knowledge</p>
+            
+            <!-- Search Section moved inside page header -->
+            <div class="search-section">
+                <div class="search-container">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search for specific books, authors, or topics...">
+                        <button><i class="fas fa-search"></i> Search</button>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Novels & Fiction -->
-            <div class="category-card">
-                <div class="category-img" style="background: linear-gradient(to right, #ff7e5f, #feb47b);"></div>
-                <div class="category-content">
-                    <h3>Reference Books</h3>
-                    <p>Reference book of all languages and subjects according to the courses</p>
-                    <span class="book-count">61,262 books</span>
-                    <a href="#" class="view-books-btn">Explore Books</a>
-                </div>
+        <!-- Categories Section -->
+        <section class="categories-section">
+            <div class="section-header">
+                <h2>Browse by Category</h2>
+                <a href="#" class="view-all">View All Categories</a>
             </div>
+            <div class="category-grid">
+                <!-- Textbooks -->
+                <div class="category-card">
+                    <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80');"></div>
+                    <div class="category-info">
+                        <h3>Textbooks</h3>
+                        <p>TextBooks for all respective courses and subjects</p>
+                        <span class="book-count">17,940 books</span>
+                        <a href="#" class="explore-btn">Explore Books</a>
+                    </div>
+                </div>
 
-            <!-- Computer Science -->
-            <div class="category-card">
-                <div class="category-img" style="background: linear-gradient(to right, #00c6ff, #0072ff);"></div>
-                <div class="category-content">
-                    <h3>Donated Books</h3>
-                    <p>Algorithms, data structures, theory, and computer science fundamentals.</p>
-                    <span class="book-count">5,550 books</span>
-                    <a href="#" class="view-books-btn">Explore Books</a>
+                <!-- Reference Books -->
+                <div class="category-card">
+                    <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');"></div>
+                    <div class="category-info">
+                        <h3>Reference Books</h3>
+                        <p>Reference book of all languages and subjects according to the courses</p>
+                        <span class="book-count">61,262 books</span>
+                        <a href="#" class="explore-btn">Explore Books</a>
+                    </div>
                 </div>
-            </div>
 
-            <!-- BCA -->
-            <div class="category-card">
-                <div class="category-img" style="background: linear-gradient(to right, #f46b45, #eea849);"></div>
-                <div class="category-content">
-                    <h3>Manuscripts / Rare books</h3>
-                    <p>Specialized resources for Bachelor of Computer Applications students.</p>
-                    <span class="book-count">2000 books</span>
-                    <a href="#" class="view-books-btn">Explore Books</a>
+                <!-- Donated Books -->
+                <div class="category-card">
+                    <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80');"></div>
+                    <div class="category-info">
+                        <h3>Donated Books</h3>
+                        <p>Books generously donated by alumni and community members</p>
+                        <span class="book-count">5,550 books</span>
+                        <a href="#" class="explore-btn">Explore Books</a>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Computer Hardware -->
-            <div class="category-card">
-                <div class="category-img" style="background: linear-gradient(to right, #8e2de2, #4a00e0);"></div>
-                <div class="category-content">
-                    <h3>E-Books</h3>
-                    <p>Books about computer components, architecture, and hardware design.</p>
-                    <span class="book-count">31,35000 books</span>
-                    <a href="#" class="view-books-btn">Explore Books</a>
+                <!-- Manuscripts / Rare books -->
+                <div class="category-card">
+                    <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');"></div>
+                    <div class="category-info">
+                        <h3>Manuscripts / Rare books</h3>
+                        <p>Historical manuscripts and rare book collections</p>
+                        <span class="book-count">2000 books</span>
+                        <a href="#" class="explore-btn">Explore Books</a>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Mathematics -->
-            <div class="category-card">
-                <div class="category-img" style="background: linear-gradient(to right, #3a7bd5, #00d2ff);"></div>
-                <div class="category-content">
-                    <h3>Journals</h3>
-                    <p>From basic arithmetic to advanced calculus and mathematical theory.</p>
-                    <span class="book-count">87 books</span>
-                    <a href="#" class="view-books-btn">Explore Books</a>
+                <!-- E-Books -->
+                <div class="category-card">
+                    <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1798&q=80');"></div>
+                    <div class="category-info">
+                        <h3>E-Books</h3>
+                        <p>Digital books accessible from anywhere</p>
+                        <span class="book-count">31,35000 books</span>
+                        <a href="#" class="explore-btn">Explore Books</a>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Science -->
-            <div class="category-card">
-                <div class="category-img" style="background: linear-gradient(to right, #11998e, #38ef7d);"></div>
-                <div class="category-content">
-                    <h3>Journal Back Volumes</h3>
-                    <p>Physics, chemistry, biology, and other scientific disciplines.</p>
-                    <span class="book-count">2,022 books</span>
-                    <a href="#" class="view-books-btn">Explore Books</a>
+                <!-- Journals -->
+                <div class="category-card">
+                    <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');"></div>
+                    <div class="category-info">
+                        <h3>Journals</h3>
+                        <p>Academic and research journals across disciplines</p>
+                        <span class="book-count">87 books</span>
+                        <a href="#" class="explore-btn">Explore Books</a>
+                    </div>
                 </div>
-            </div>
 
-            <!-- History -->
-            <div class="category-card">
-                <div class="category-img" style="background: linear-gradient(to right, #bb6dec, #6b0b9c);"></div>
-                <div class="category-content">
-                    <h3>E-Journals</h3>
-                    <p>Historical accounts, analysis, and perspectives from all eras.</p>
-                    <span class="book-count">6000+ books</span>
-                    <a href="#" class="view-books-btn">Explore Books</a>
+                <!-- Journal Back Volumes -->
+                <div class="category-card">
+                    <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1506784983877-45594efa4cbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1768&q=80');"></div>
+                    <div class="category-info">
+                        <h3>Journal Back Volumes</h3>
+                        <p>Archived journal volumes from previous years</p>
+                        <span class="book-count">2,022 books</span>
+                        <a href="#" class="explore-btn">Explore Books</a>
+                    </div>
                 </div>
-            </div>
 
-             <!-- Science -->
-            <div class="category-card">
-                <div class="category-img" style="background: linear-gradient(to right, #11998e, #38ef7d);"></div>
-                <div class="category-content">
-                    <h3>Online Database (NLIST and JGate)</h3>
-                    <p>Physics, chemistry, biology, and other scientific disciplines.</p>
-                    <span class="book-count">2 </span>
-                    <a href="#" class="view-books-btn">Explore Books</a>
+                <!-- E-Journals -->
+                <div class="category-card">
+                    <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');"></div>
+                    <div class="category-info">
+                        <h3>E-Journals</h3>
+                        <p>Digital journal subscriptions accessible online</p>
+                        <span class="book-count">6000+ books</span>
+                        <a href="#" class="explore-btn">Explore Books</a>
+                    </div>
                 </div>
-            </div>
 
-                <!-- Science -->
-            <div class="category-card">
-                <div class="category-img" style="background: linear-gradient(to right, #11998e, #38ef7d);"></div>
-                <div class="category-content">
-                    <h3>CD/DVD</h3>
-                    <p>Physics, chemistry, biology, and other scientific disciplines.</p>
-                    <span class="book-count">653</span>
-                    <a href="#" class="view-books-btn">Explore Books</a>
+                <!-- Online Database -->
+                <div class="category-card">
+                    <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');"></div>
+                    <div class="category-info">
+                        <h3>Online Database (NLIST and JGate)</h3>
+                        <p>Access to premium online databases and resources</p>
+                        <span class="book-count">2 databases</span>
+                        <a href="#" class="explore-btn">Explore Books</a>
+                    </div>
                 </div>
-            </div>
+
+                <!-- CD/DVD -->
+                <div class="category-card">
+                    <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80');"></div>
+                    <div class="category-info">
+                        <h3>CD/DVD</h3>
+                        <p>Educational and multimedia resources in CD/DVD format</p>
+                        <span class="book-count">653 items</span>
+                        <a href="#" class="explore-btn">Explore Books</a>
+                    </div>
+                </div>
    
-            <div class="category-card">
-                <div class="category-img" style="background: linear-gradient(to right, #11998e, #38ef7d);"></div>
-                <div class="category-content">
-                    <h3>Newspapers</h3>
-                    <p>Physics, chemistry, biology, and other scientific disciplines.</p>
-                    <span class="book-count">23</span>
-                    <a href="#" class="view-books-btn">Explore Books</a>
+                <!-- Newspapers -->
+                <div class="category-card">
+                    <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');"></div>
+                    <div class="category-info">
+                        <h3>Newspapers</h3>
+                        <p>Current and archived newspaper collections</p>
+                        <span class="book-count">23 titles</span>
+                        <a href="#" class="explore-btn">Explore Books</a>
+                    </div>
+                </div>
+
+                <!-- Magazines -->
+                <div class="category-card">
+                    <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80');"></div>
+                    <div class="category-info">
+                        <h3>Magazines</h3>
+                        <p>Popular magazines across various interests</p>
+                        <span class="book-count">13 titles</span>
+                        <a href="#" class="explore-btn">Explore Books</a>
+                    </div>
                 </div>
             </div>
+        </section>
+    </div>
 
-            <div class="category-card">
-                <div class="category-img" style="background: linear-gradient(to right, #11998e, #38ef7d);"></div>
-                <div class="category-content">
-                    <h3>Magazines</h3>
-                    <p>Physics, chemistry, biology, and other scientific disciplines.</p>
-                    <span class="book-count">13</span>
-                    <a href="#" class="view-books-btn">Explore Books</a>
-                </div>
+    <!-- Side Panel -->
+    <div class="side-panel" id="sidePanel">
+        <span class="close-btn" id="closePanel">&times;</span>
+        <h3>Menu</h3>
+        <h3>Welcome, Ruksar</h3>
+        <ul>
+            <li id="viewProfile"><i class="fas fa-user"></i> View Profile</li>
+            <li><a href="dashboard.html"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
+           
+            <li><a href="#" id="feedbackLink"><i class="fas fa-comment-alt"></i> Feedback</a></li>
+            <li><i class="fas fa-question-circle"></i> Help</li>
+            <li id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</li>
+        </ul>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="profile-card" id="profileCard">
+        <div class="profile-card-header">
+            <div class="big-icon">👤</div>
+            <div>
+                <h3>Ruksar Shaikh</h3>
+                <p>SYBSc IT Student</p>
             </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-column">
-                <h3>LibroDex</h3>
-                <p>Smart library management solution for modern educational institutions and readers.</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
-            <div class="footer-column">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="features.html">Features</a></li>
-                    <li><a href="explore.html">Explore</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h3>Resources</h3>
-                <ul>
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Tutorials</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h3>Contact</h3>
-                <ul>
-                    <li><i class="fas fa-map-marker-alt"></i> 123 Library Street, Bookville</li>
-                    <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
-                    <li><i class="fas fa-envelope"></i> info@librodex.com</li>
-                </ul>
-            </div>
+        <div class="profile-details">
+            <p><strong>Class:</strong> <span>SYBSc IT</span></p>
+            <p><strong>Course:</strong> <span>Computer Science</span></p>
+            <p><strong>Gender:</strong> <span>Female</span></p>
+            <p><strong>Student ID:</strong> <span>STD12345</span></p>
+            <p><strong>Email:</strong> <span>ruksar@example.com</span></p>
+            <p><strong>Phone:</strong> <span>+91 98765 43210</span></p>
         </div>
-        <div class="copyright">
-            <p>© 2025 LibroDex. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- Back to Top Button -->
-    <a href="#" class="back-to-top" id="backToTop">
-        <i class="fas fa-arrow-up"></i>
-    </a>
+        <button class="close-card" id="closeCard">Close</button>
+    </div>
+<!-- Feedback Card -->
+    <div class="feedback-card" id="feedbackCard">
+        <span class="close-cross" id="closeCross">&times;</span>
+        <h2>Feedback Form</h2>
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" required placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label for="email">Your Email</label>
+                <input type="email" id="email" required placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="rating">Rate Us</label>
+                <select id="rating" required>
+                    <option value="">-- Select Rating --</option>
+                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                    <option value="4">⭐⭐⭐⭐ Good</option>
+                    <option value="3">⭐⭐⭐ Average</option>
+                    <option value="2">⭐⭐ Poor</option>
+                    <option value="1">⭐ Very Bad</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="message">Your Feedback</label>
+                <textarea id="message" required placeholder="Write your feedback..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Submit</button>
+            <div id="successMessage" class="success-message">✅ Thank you for your feedback!</div>
+        </form>
+    </div>
 
     <script>
         // Mobile Menu Toggle
@@ -741,24 +1199,88 @@
             } else {
                 header.classList.remove('scrolled');
             }
-            
-            // Back to top button visibility
-            if (window.scrollY > 500) {
-                document.getElementById('backToTop').classList.add('visible');
-            } else {
-                document.getElementById('backToTop').classList.remove('visible');
-            }
         });
 
-        // Back to Top Button
-        document.getElementById('backToTop').addEventListener('click', (e) => {
+        // Side Panel Toggle
+        const profileBtn = document.getElementById('profileBtn');
+        const sidePanel = document.getElementById('sidePanel');
+        const closePanel = document.getElementById('closePanel');
+        const pageContent = document.getElementById('pageContent');
+        const overlay = document.getElementById('overlay');
+
+        profileBtn.addEventListener('click', () => {
+            sidePanel.classList.add('active');
+            overlay.style.display = 'block';
+        });
+
+        closePanel.addEventListener('click', () => {
+            sidePanel.classList.remove('active');
+            overlay.style.display = 'none';
+        });
+
+        // View Profile
+        const viewProfile = document.getElementById('viewProfile');
+        const profileCard = document.getElementById('profileCard');
+        const closeCard = document.getElementById('closeCard');
+
+        viewProfile.addEventListener('click', () => {
+            profileCard.classList.add('active');
+            overlay.style.display = 'block';
+            sidePanel.classList.remove('active');
+        });
+
+        closeCard.addEventListener('click', () => {
+            profileCard.classList.remove('active');
+            overlay.style.display = 'none';
+        });
+
+        
+        // Feedback
+        const feedbackLink = document.getElementById('feedbackLink');
+        const feedbackCard = document.getElementById('feedbackCard');
+        const closeCross = document.getElementById('closeCross');
+        const feedbackForm = document.getElementById('feedbackForm');
+        const successMessage = document.getElementById('successMessage');
+
+        feedbackLink.addEventListener('click', (e) => {
             e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            feedbackCard.classList.add('active');
+            overlay.style.display = 'block';
+            sidePanel.classList.remove('active');
         });
 
+        closeCross.addEventListener('click', () => {
+            feedbackCard.classList.remove('active');
+            overlay.style.display = 'none';
+        });
+
+        // Feedback Form Submission
+        feedbackForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Save feedback to localStorage
+            const data = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                rating: document.getElementById('rating').value,
+                message: document.getElementById('message').value
+            };
+            
+            let feedbackList = JSON.parse(localStorage.getItem('feedbackList')) || [];
+            feedbackList.push(data);
+            localStorage.setItem('feedbackList', JSON.stringify(feedbackList));
+            
+            // Show success message
+            successMessage.style.display = 'block';
+            feedbackForm.reset();
+            
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+                feedbackCard.classList.remove('active');
+                overlay.style.display = 'none';
+            }, 3000);
+        });
         // Search functionality
         document.querySelector('.search-bar button').addEventListener('click', () => {
             const searchTerm = document.querySelector('.search-bar input').value;
@@ -774,7 +1296,45 @@
                 document.querySelector('.search-bar button').click();
             }
         });
+
+        // Logout
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('currentStudent');
+            window.location.href = 'index.html';
+        });
+
+        // Close overlay when clicked
+        overlay.addEventListener('click', () => {
+            sidePanel.classList.remove('active');
+            profileCard.classList.remove('active');
+            overlay.style.display = 'none';
+        });
+
+        // Menu items active state
+        const menuItems = document.querySelectorAll('.side-panel ul li');
+        
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                menuItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        // Create floating books animation
+        const floatingBooksContainer = document.getElementById('floatingBooks');
+        const bookIcons = ['📚', '📖', '📕', '📗', '📘', '📙', '📓', '📒', '📔'];
+        
+        for (let i = 0; i < 15; i++) {
+            const book = document.createElement('div');
+            book.className = 'floating-book';
+            book.textContent = bookIcons[Math.floor(Math.random() * bookIcons.length)];
+            book.style.left = `${Math.random() * 100}%`;
+            book.style.animationDelay = `${Math.random() * 15}s`;
+            book.style.fontSize = `${Math.random() * 1 + 1.5}rem`;
+            floatingBooksContainer.appendChild(book);
+        }
     </script>
 </body>
-
 </html>
